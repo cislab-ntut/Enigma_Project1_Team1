@@ -121,6 +121,12 @@ for rotor1 in range(0,5):
                                                                             for letter in tempPlugBoard:
                                                                                 file.write(letter)
                                                                             exec(open("Enigma.py").read())
+                                                                            file=open('result.txt','r')
+                                                                            resultStr=file.read()
+                                                                            if resultStr[-6:]=='HITLER':
+                                                                                found=True
+                                                                                file.close()
+                                                                                exit(0)
                                                                             file=open('PlugBoard.txt','w')
                                                                             file.write('')
 
@@ -157,12 +163,6 @@ for rotor1 in range(0,5):
                             file.write('')
                             file=open('PlugBoard.txt','w')
                             file.write('')
-
-                            file=open('result.txt','r')
-                            resultStr=file.read()
-                            if resultStr[-6:]=='HITLER':
-                                found=True
-                                break
 
                 file=open('RotorsOrder.txt','w')
                 file.write('')
