@@ -1,173 +1,205 @@
-
 #include <iostream>
 #include <string>
 #include <cstring>
 #include <cstdio>
 using namespace  std;
-struct password {
+
+struct  Rotors{ //storing the five roters which are original
 	char name;
 	string unit;
-	char Pointer;
+	char notch;
 	char Start;
 };
-struct Pointer {
+struct Position {
 	string turntable;
-	char First_Pointer;
-	char Position;
+	char First_Position;
+	char now;
 	string ETW;
 };
-password a = { 'A',"BDFHJLCPRTXVZNYEIWGAKMUSQO",'W','X' };
-password b = { 'B',"AJDKSIRUXBLHWTMCQGZNPYFVOE",'F','D' };
-password c = { 'C',"EKMFLGDQVZNTOWYHXUSPAIBRCJ",'R','H' };
-password d = { 'D',"ESOVPZJAYQUIRHXLNFTGKDCMWB",'J','E' };
-password e = { 'E',"HEJXQOTZBVFDASCILWPGYNMURK",'Z','H' };
-string react = "YRUHQSLDPXNGOKMIEBFZCWVJAT", medi1,medi2, abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-void change_first(string &a, string &b, char t) {
+struct Plugboard {
+	string input;
+	string output;
+};
+Rotors I = { 'C',"EKMFLGDQVZNTOWYHXUSPAIBRCJ",'Y','H' };
+Rotors II = { 'B',"AJDKSIRUXBLHWTMCQGZNPYFVOE",'M','D' };
+Rotors III = { 'A',"BDFHJLCPRTXVZNYEIWGAKMUSQO",'D','X' };
+Rotors IV = { 'D',"ESOVPZJAYQUIRHXLNFTGKDCMWB",'R','D' };
+Rotors V = { 'E',"VZBRGITYUPSDNHLXAWMJQOFECK",'H','E' };
+string reflector = "YRUHQSLDPXNGOKMIEBFZCWVJAT";
+string ETW = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+string buffer1, buffer2;
+
+void Plugboard_setting(string setting, Plugboard &plugboard){
+
+	for (int i = 0; i < setting.length()/2; i++)
+	{
+		for (int j = i * 2; j < (i * 2) + 2; j++)
+		{
+			for (int k = 0; j < 26; k++)
+			{
+				if (plugboard.input[k] == setting[j])
+				{
+
+				}
+			}
+			
+		}
+	}
+}
+void first_position_changed(string &turntable, string &ETW, char first_position) {
 	int i;
 	for (i = 0; i < 26; i++) {
-		if (b[i] == t) {
-			medi1 = a.substr(0, i);
-			medi2 = b.substr(0, i);
+		if (ETW[i] == first_position) {
+			buffer1 = turntable.substr(0, i);
+			buffer2 = ETW.substr(0, i);
 			break;
 		}
 	}
-	a = a.substr(i, 26 - i);
-	a = a + medi1;
-	b = b.substr(i, 26 - i);
-	b = b + medi2;
+	turntable = turntable.substr(i, 26 - i);
+	turntable = turntable + buffer1;
+	ETW = ETW.substr(i, 26 - i);				
+	ETW = ETW + buffer2;
 }
-void change1(int &middle, string a, string b) {
-	char t = a[middle];
+void Encoding_before_reflector(int &encrypt_letter_position, string turntable, string ETW) {
+	char t = turntable[encrypt_letter_position];
 	int i;
 	for (i = 0; i < 26; i++) {
-		if (b[i] == t) {
-			middle = i;
+		if (ETW[i] == t) {
+			encrypt_letter_position = i;
 			break;
 		}
 	}
 }
-void change2(char &re_middle, string a, string b, string c, bool Rec) {
+void Encoding_after_reflector(char &encrypt_letter, string turntable, string ETW_now, string last_wheel_ETW, bool reflet) {
 	int i;
-	if (Rec == true)
+	if (reflet == true)
 	{
 		for (i = 0; i < 26; i++) {
-			if (abc[i] == re_middle) {
+			if (last_wheel_ETW[i] == encrypt_letter) {
 				break;
 			}
 		}
-		re_middle = b[i];
+		encrypt_letter = ETW_now[i];
 		for (i = 0; i < 26; i++) {
-			if (a[i] == re_middle) {
+			if (turntable[i] == encrypt_letter) {
 				break;
 			}
 		}
-		re_middle = abc[i];
+		encrypt_letter = last_wheel_ETW[i];
 	}
 	else
 	{
 		for (i = 0; i < 26; i++) {
-			if (c[i] == re_middle) {
+			if (last_wheel_ETW[i] == encrypt_letter) {
 				break;
 			}
 		}
-		re_middle = b[i];
+		encrypt_letter = ETW_now[i];
 		for (i = 0; i < 26; i++) {
-			if (a[i] == re_middle) {
+			if (turntable[i] == encrypt_letter) {
 				break;
 			}
 		}
-		re_middle = abc[i];
+		encrypt_letter = ETW[i];
 	}
 	
 }
-void add1(string &a,string &b) {
-	medi1 = a.substr(0, 1);
-	a = a.substr(1, 25);
-	a = a + medi1;
-	medi2 = b.substr(0, 1);
-	b = b.substr(1, 25);
-	b = b + medi2;
+void rote_1(string &turntable,string &ETW) {
+	buffer1 = turntable.substr(0, 1);
+	turntable = turntable.substr(1, 25);
+	turntable = turntable + buffer1;
+	buffer2 = ETW.substr(0, 1);
+	ETW = ETW.substr(1, 25);
+	ETW = ETW + buffer2;
 }
 int main() {
 	int i, j, k, n;
-	string t;
+	string keyset, input;
 	
 	cin >> n;
 	while (n--) {
-		password sel[5];
-		sel[0] = a, sel[1] = b, sel[2] = c, sel[3] = d, sel[4] = e;
-		Pointer zhuanzi[3];
-		Pointer turntableStart[3];
-		cin >> t;
+		Rotors sel[5];
+		sel[0] = I, sel[1] = II, sel[2] = III, sel[3] = IV, sel[4] = V;
+		Position rotor[3];
+		Position turntableStart[3];
+		cin >> keyset;
 		for (i = 0; i < 3; i++) {
 			for (j = 0; j < 5; j++) {
-				if (sel[j].name == t[i]) {
-					zhuanzi[i].turntable = sel[j].unit;
-					zhuanzi[i].First_Pointer = sel[j].Pointer;
-					zhuanzi[i].ETW = abc;
+				if (sel[j].name == keyset[i]) {
+					rotor[i].turntable = sel[j].unit;
+					rotor[i].First_Position = sel[j].notch;
+					rotor[i].ETW = ETW;
 					turntableStart[i].turntable = sel[j].unit;
-					turntableStart[i].First_Pointer = sel[j].Pointer;
-					turntableStart[i].ETW = abc;
+					turntableStart[i].First_Position = sel[j].notch;
+					turntableStart[i].ETW = ETW;
 					break;
 				}
 			}
 		}
 		for (i = 0; i < 3; i++) {
-			zhuanzi[i].Position = t[3 + i];
-			change_first(zhuanzi[i].turntable, zhuanzi[i].ETW, t[3 + i]);
+			rotor[i].now = keyset[3 + i];
+			first_position_changed(rotor[i].turntable, rotor[i].ETW, keyset[3 + i]);
 		}
-		cin >> t;
+		string setPlugboard;
+		Plugboard plugboard = { "ABCDEFGHIJKLMNOPQRSTUVWXYZ","ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+
+		cin >> setPlugboard;
+
+		Plugboard_setting(setPlugboard, plugboard);
+
+		cin >> input;
 		
+
 		k = 0;
-		while (t[k] != '\0') {
-			add1(zhuanzi[0].turntable, zhuanzi[0].ETW);
-			zhuanzi[0].Position = zhuanzi[0].ETW[0];
+		while (input[k] != '\0') {
+			rote_1(rotor[0].turntable, rotor[0].ETW);
+			rotor[0].now = rotor[0].ETW[0];
 			//近絃锣笵ㄨ勃近絃锣
-			if (zhuanzi[0].Position == zhuanzi[0].First_Pointer && k != 0) {
-				add1(zhuanzi[1].turntable, zhuanzi[1].ETW);
-				zhuanzi[1].Position = zhuanzi[1].ETW[0];
+			if (rotor[0].now == rotor[0].First_Position && k != 0) {
+				rote_1(rotor[1].turntable, rotor[1].ETW);
+				rotor[1].now = rotor[1].ETW[0];
 			}
 			// DOUBLE STEP 惠耞近絃竚
-			if ((zhuanzi[1].Position+1) == zhuanzi[1].First_Pointer  && zhuanzi[0].Position==a.Start && k != 0) {
-				add1(zhuanzi[2].turntable, zhuanzi[2].ETW);
-				zhuanzi[2].Position = zhuanzi[2].ETW[0];
-				add1(zhuanzi[1].turntable, zhuanzi[1].ETW);
-				zhuanzi[1].Position = zhuanzi[1].ETW[0];
+			if ((rotor[1].now+1) == rotor[1].First_Position  && rotor[0].now==I.Start && k != 0) {
+				rote_1(rotor[2].turntable, rotor[2].ETW);
+				rotor[2].now = rotor[2].ETW[0];
+				rote_1(rotor[1].turntable, rotor[1].ETW);
+				rotor[1].now = rotor[1].ETW[0];
 			}
-			int middle;
+			int encrypt_letter_position;     
 			for (i = 0; i < 26; i++) {
-				if (abc[i] == t[k]) {
-					middle = i;
+				if (ETW[i] == input[k]) {
+					encrypt_letter_position = i;
 					break;
 				}
 			}
 			for (i = 0; i < 3; i++) {
-				change1(middle, zhuanzi[i].turntable, zhuanzi[i].ETW);
+				Encoding_before_reflector(encrypt_letter_position, rotor[i].turntable, rotor[i].ETW);
 			}
 
-			char re_middle = react[middle];
+			char encrypt_letter = reflector[encrypt_letter_position];
 			for (i = 2; i >= 0; i--) {
-				bool Rec = false;
+				bool reflet = false;
 				//は甮
 				if (i == 2)
 				{
-					Rec = true;
-					change2(re_middle, turntableStart[i].turntable, zhuanzi[i].ETW, abc, Rec);
+					reflet = true;
+					Encoding_after_reflector(encrypt_letter, turntableStart[i].turntable, rotor[i].ETW, ETW, reflet);
 				}
 				else
 					//癴近絃
 				{
-					change2(re_middle, turntableStart[i].turntable, zhuanzi[i].ETW, zhuanzi[i+1].ETW, Rec);
+					Encoding_after_reflector(encrypt_letter, turntableStart[i].turntable, rotor[i].ETW, rotor[i+1].ETW, reflet);
 				}
 			}
 			for (i = 0; i < 26; i++) {
-				if (zhuanzi[0].ETW[i] == re_middle) {
+				if (rotor[0].ETW[i] == encrypt_letter) {
 					break;
 				}
 			}
-			re_middle = abc[i];
+			encrypt_letter = ETW[i];
 
-			cout << re_middle;
+			cout << encrypt_letter;
 
 			k++;
 			
