@@ -185,8 +185,12 @@ void encryption(Plugboard plugboard, Position rotor[], Position turntableStart[]
 			}
 		}
 		encrypt_letter = ETW[i];
-
-		cout << encrypt_letter;
+		for (int i = 0; i < 26; i++)
+		{
+			if(encrypt_letter== plugboard.output[i])
+				cout << plugboard.input[i];
+		}
+		
 
 		k++;
 
