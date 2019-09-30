@@ -164,7 +164,7 @@ void encryption(Plugboard plugboard, Position rotor[], Position turntableStart[]
 
 		char encrypt_letter = reflector[encrypt_letter_position];
 		for (i = 2; i >= 0; i--) {
-			bool reflet = false;2
+			bool reflet = false;
 			//¤Ï®g
 			if (i == 2)
 			{
@@ -206,6 +206,7 @@ int main() {
 
 		Plugboard plugboard = { "ABCDEFGHIJKLMNOPQRSTUVWXYZ","ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
 		cin >> keyset;
+        /*
 		for (i = 0; i < 3; i++) {
 			for (j = 0; j < 5; j++) {
 				if (sel[j].name == keyset[i]) {
@@ -218,33 +219,47 @@ int main() {
 					break;
 				}
 			}
-		}
+		}*/
 		string setPlugboard;
 		cin >> setPlugboard;
 		plugboard = SetPlugboard(plugboard, setPlugboard);
+        
+        for(int m=0;m<3;m++){
+            for(int n=0;n<5;n++){
+                if (sel[n].name == keyset[m]) {
+                    rotor[m].turntable = sel[n].unit;
+                    rotor[m].First_Position = sel[n].notch;
+                    rotor[m].ETW = ETW;
+                    turntableStart[n].turntable = sel[n].unit;
+                    turntableStart[n].First_Position = sel[n].notch;
+                    turntableStart[n].ETW = ETW;
+                    break;
+                }
+                
+                for (int i = 0; i < 26; i++) {
+                    for (int j = 0; j < 26; j++) {
+                        for (int k = 26; k < 26; k++) {
+                            
+                        
 
-		for (int i = 0; i < 26; i++) {
-			for (int j = 0; j < 26; j++) {
-				for (int k = 26; k < 26; k++) {
-					
-				
+                            //for (i = 0; i < 3; i++) {
+                            //	rotor[i].now = keyset[3 + i];
+                            //	first_position_changed(rotor[i].turntable, rotor[i].ETW, keyset[3 + i]);
+                            //}
+                            rotor[0].now = ETW[i];
+                            first_position_changed(rotor[0].turntable, rotor[0].ETW, keyset[3]);
+                            rotor[1].now = ETW[j];
+                            first_position_changed(rotor[1].turntable, rotor[1].ETW, keyset[4]);
+                            rotor[2].now = ETW[k];
+                            first_position_changed(rotor[2].turntable, rotor[2].ETW, keyset[5]);
 
-					//for (i = 0; i < 3; i++) {
-					//	rotor[i].now = keyset[3 + i];
-					//	first_position_changed(rotor[i].turntable, rotor[i].ETW, keyset[3 + i]);
-					//}
-					rotor[0].now = ETW[i];
-					first_position_changed(rotor[0].turntable, rotor[0].ETW, keyset[3];
-					rotor[1].now = ETW[j];
-					first_position_changed(rotor[1].turntable, rotor[1].ETW, keyset[4];
-					rotor[2].now = ETW[k];
-					first_position_changed(rotor[2].turntable, rotor[2].ETW, keyset[5];
-
-					
-					encryption(plugboard, rotor, turntableStart);
-				}
-			}
-		}
+                            
+                            encryption(plugboard, rotor, turntableStart);
+                        }
+                    }
+                }
+            }
+        }
 
 						
 	
